@@ -15,8 +15,9 @@ public class Inventory
             //no space...
             //state that there is no room and ask if player wants to get rid of anything
             string choice = "dogma";
+
             //run as long as player doesn't make a valid choice
-            while (!string.Equals(choice, "yes", StringComparison.OrdinalIgnoreCase) && !string.Equals(choice, "no", StringComparison.OrdinalIgnoreCase)){
+            while (choice.ToLower() != "yes" && choice.ToLower() != "no"){
             Console.WriteLine("\nYou cannot hold any more items. Do you want to discard one of your items?\nYes or No");
             choice = Console.ReadLine();
             }
