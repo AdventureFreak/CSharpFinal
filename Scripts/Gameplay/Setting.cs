@@ -4,6 +4,7 @@ public class Setting
     public int enemies;
     public bool boss;
     public int treasure;
+    //this will make something random happen
     public int chance;
 
     //constructor sets the parameters

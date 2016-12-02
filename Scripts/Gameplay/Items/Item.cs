@@ -4,4 +4,6 @@ public class Item
     int power;
     //durability determines how many times the item can be used
     int durability;
+    //resist determines how effective the item is at blocking damage
+    int resist;
 }

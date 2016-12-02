@@ -1,6 +1,6 @@
 //class for player and enemies
 using System;
-class Entity
+public class Entity
 {
     //stats each enemy and the player will share
     public string name;
