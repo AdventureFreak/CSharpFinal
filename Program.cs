@@ -12,9 +12,6 @@ namespace ConsoleApplication
             Player player = new Player();
 
             //test garbage
-            Console.WriteLine("\n" + player.name + "\n");
-            game.SetStage(player);
-            Console.WriteLine("\n" + player.name + "\n");
             inv.AddItem(new Item());
         }
     }

@@ -8,23 +8,58 @@ public class Inventory
     //function to add items into inventory
     //parameters: item to add
     public void AddItem(Item thing){
-        //add item if inventory has space
-        if (inventory.Count < size) {
-            inventory.Add(thing);
+        //if the item being added is not a healing item
+        if (thing.GetType()!=typeof(Healing)){
+            //add item if inventory has space
+            if (inventory.Count < size) {
+                inventory.Add(thing);
+            }else{
+                //no space...
+                ReplaceItem(thing);
+            }
         }else{
-            //no space...
-            //state that there is no room and ask if player wants to get rid of anything
-            string choice = "dogma";
+            //if the item is a healing item
+            //run a for loop to check the name of all items in inventory
+            //-1 is the result that no index in the list is the same as the item being added
+            int id = -1;
+            for (int i = 0; i < inventory.Count; i++){
+                if(inventory[i].name == thing.name){
+                    id = i;
+                }
+            }
 
-            //run as long as player doesn't make a valid choice
-            while (choice.ToLower() != "yes" && choice.ToLower() != "no"){
+            //see if there was already a healing item of the same type in your inventory
+            if (id > 0)
+            {
+                inventory[id].durability += thing.durability;
+            }else{
+                ReplaceItem(thing);
+            }
+        }
+    }
+    void ReplaceItem(Item thing) {
+        //state that there is no room and ask if player wants to get rid of anything
+        string choice = "dogma";
+
+        //run as long as player doesn't make a valid choice
+        while (choice.ToLower() != "yes" && choice.ToLower() != "no"){
             Console.WriteLine("\nYou cannot hold any more items. Do you want to discard one of your items?\nYes or No");
             choice = Console.ReadLine();
-            }
-            //do things based on choice
-            Console.WriteLine(choice);
-            //if yes, ask what item the player would like to replace and do so
-            //if no, we are done
         }
+        //do things based on choice
+        Console.WriteLine(choice);
+        //if yes, ask what item the player would like to replace and do so
+        if(choice == "true"){
+              ReadInv();  
+        }
+        //if no, we are done
+    }
+
+    public string ReadInv(){
+        string writeOut = "Your inventory consists of: \n";
+        foreach(Item thing in inventory){
+            writeOut += thing.PrintStats() + "\n";
+        }
+        return writeOut;
     }
 }
