@@ -57,6 +57,9 @@ public class Inventory
                   Console.WriteLine("\nInvalid choice\nWhich item will you replace?");
                   newChoice = Console.ReadLine();
               }
+
+              //if cancel is not selected
+              //get index number of item with matching name
         }
         //if no, we are done
     }
