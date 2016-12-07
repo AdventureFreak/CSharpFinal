@@ -74,4 +74,8 @@ public class Game
             settingTypes.RemoveAt(num);
         }
     }
+
+    public void Start(){
+        
+    }
 }

@@ -43,23 +43,49 @@ public class Inventory
 
         //run as long as player doesn't make a valid choice
         while (choice.ToLower() != "yes" && choice.ToLower() != "no"){
-            Console.WriteLine("\nYou cannot hold any more items. Do you want to discard one of your items?\nYes or No");
+            Console.WriteLine("\nYou cannot hold any more items. Do you want to discard one of your items?\nYes or No\n");
             choice = Console.ReadLine();
         }
         //do things based on choice
-        Console.WriteLine(choice);
         //if yes, ask what item the player would like to replace and do so
-        if(choice == "true"){
-              ReadInv();  
+        if(choice.ToLower() == "yes"){
+              Console.WriteLine("\nWhich item will you replace?" + ReadInv() + "Cancel\n");
+
+              //new choice search to see if the entered option is a valid item
+              string newChoice = Console.ReadLine();
+              while (!ItemValid(newChoice.ToLower()) && newChoice.ToLower() != "cancel"){
+                  Console.WriteLine("\nInvalid choice\nWhich item will you replace?");
+                  newChoice = Console.ReadLine();
+              }
         }
         //if no, we are done
     }
 
-    public string ReadInv(){
+    //builds a visual representation of the inventory
+    string ReadInv(){
         string writeOut = "Your inventory consists of: \n";
         foreach(Item thing in inventory){
             writeOut += thing.PrintStats() + "\n";
         }
         return writeOut;
+    }
+
+    //check to see if a item name is within the item list
+    bool ItemValid(string test){
+        //list of strings
+        //will hold all item names
+        List<string> names = new List<string>();
+
+        //add names of inventory over
+        foreach(Item thing in inventory){
+            names.Add(thing.name.ToLower());
+        }
+
+        //test is choice entered matches an item name
+        if(names.Contains(test)){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
