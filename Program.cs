@@ -13,6 +13,8 @@ namespace ConsoleApplication
 
             //test garbage
             inv.AddItem(new Item());
+            //tester
+        
         }
     }
 }
