@@ -24,4 +24,13 @@ public class Item
     public string PrintStats(){
         return stats;
     }
+
+    //virtual functions so the child can use them
+    public virtual void SetName(string nam){
+        //doesn't do anything
+    }
+
+    public virtual void SetDurability(int blah){
+        //also doesn't do anythin
+    }
 }

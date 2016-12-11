@@ -6,4 +6,8 @@ public class Weapon : Item
         resist = res;;
         stats = name + ": " + power + " base damage. " + resist + " base damage block.";
     }
+    public override void SetName(string nam){
+        name = nam;
+        stats = name + ": " + power + " base damage. " + resist + " base damage block.";
+    }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 public class Inventory
 {
-    int size = 0;
+    int size = 5;
     public List<Item> inventory = new List<Item>();
 
     //adds this to the name of an item if it is already in your inventory
@@ -17,28 +17,26 @@ public class Inventory
         if (thing.GetType()!=typeof(Healing)){
             //add item if inventory has space
             if (inventory.Count < size) {
-                thing.name = Rename(thing);
+                thing.SetName(Rename(thing, inventory));
                 inventory.Add(thing);
             }else{
                 //no space...
                 ReplaceItem(thing);
             }
-        }else{
+        }else if(ItemValid(thing.name, inventory)){
             //if the item is a healing item
             //run a for loop to check the name of all items in inventory
-            //-1 is the result that no index in the list is the same as the item being added
-            int id = -1;
             for (int i = 0; i < inventory.Count; i++){
                 if(inventory[i].name == thing.name){
-                    id = i;
+                    inventory[i].durability += thing.durability;
                 }
             }
-
-            //see if there was already a healing item of the same type in your inventory
-            if (id > 0)
-            {
-                inventory[id].durability += thing.durability;
+        }else{
+            if (inventory.Count < size) {
+                //add if there is space
+                inventory.Add(thing);
             }else{
+                //no space...
                 ReplaceItem(thing);
             }
         }
@@ -66,10 +64,10 @@ public class Inventory
             //if cancel is not selected
             if(newChoice.ToLower() != "cancel"){
                 //holds the index to replace
-                int index = GetIndex(thing.name, inventory);
+                int index = GetIndex(thing.name.ToLower(), inventory);
 
                 //make sure the name isn't taken
-                thing.name = Rename(thing);
+                thing.SetName(Rename(thing, inventory));
                 //tell the player what they have done, so they can think about it
                 Console.WriteLine("\n" + inventory[index].name + " has been replaced with a " + thing.name + ".\n");
                 //swap them
@@ -94,7 +92,6 @@ public class Inventory
 
     //check to see if a item name is within the item list
     static bool ItemValid(string test, List<Item> stuff){
-        Console.WriteLine("The code worked!");
 
         //list of strings
         //will hold all item names
@@ -103,9 +100,6 @@ public class Inventory
         //add names of inventory over
         foreach(Item thing in stuff){
             names.Add(thing.name.ToLower());
-
-            //debug
-            Console.WriteLine(thing.name);
         }
 
         //test is choice entered matches an item name
@@ -113,19 +107,22 @@ public class Inventory
     }
 
     //adds the item into the inventory while making sure the names don't stack
-    string Rename(Item thing){
+    string Rename(Item thing, List<Item> stuff){
+
         //run a check on item names
         string newName = thing.name;
         bool nameFree = true;
-        foreach(Item things in inventory){
+        foreach(Item things in stuff){
             if(thing.name == things.name){
                 nameFree = false;
             }   
         }
+
         //change name of item if it's not free
         if(!nameFree){
-            thing.name = thing.name + nameAdd++.ToString();
+            newName += nameAdd++;
         }
+        Console.WriteLine(newName);
         return newName;
     }
 
@@ -135,7 +132,7 @@ public class Inventory
 
         //get index number of item with matching name
         for (int i = 0; i < stuff.Count; i++){
-            if(stuff[i].name == name){
+            if(stuff[i].name.ToLower() == name){
                 index = i;
             }
         }
@@ -163,7 +160,7 @@ public class Inventory
                 healing = false;
             }else{
                 Weapon weap = new Weapon(Words.GetWeapon(), rand.Next(1,me.attack/2), rand.Next(1,(me.defence/4)+1));
-                weap.name = Rename(weap);
+                weap.SetName(Rename(weap, newItems));
                 newItems.Add(weap);
             }
         }
@@ -179,7 +176,7 @@ public class Inventory
         if(choiceString != "nothing"){
             //if it was a valid choice
             //get the item from the temporary list
-            int indexItem = GetIndex(choiceString, newItems);
+            int indexItem = GetIndex(choiceString.ToLower(), newItems);
             Item thing = newItems[indexItem];
             //add the item to the inventory
             AddItem(thing);
