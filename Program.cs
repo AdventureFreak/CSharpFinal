@@ -11,10 +11,17 @@ namespace ConsoleApplication
             //instantiate the player
             Player player = new Player();
 
-            //test garbage
-            inv.AddItem(new Item());
             //tester
-        
+            Console.WriteLine("Inventory contains:\n" +inv.PrintInventory());
+            inv.GetNewItem(3,player);
+
+            Console.WriteLine("Inventory contains:\n" +inv.PrintInventory());
+            inv.GetNewItem(4,player);
+
+            Console.WriteLine("Inventory contains:\n" +inv.PrintInventory());
+            inv.GetNewItem(5,player);
+
+            Console.WriteLine("Inventory contains:\n" +inv.PrintInventory());
         }
     }
 }
