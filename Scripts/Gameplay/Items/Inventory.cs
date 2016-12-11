@@ -5,6 +5,11 @@ public class Inventory
     int size = 5;
     public List<Item> inventory = new List<Item>();
 
+    //initiates the inventory
+    public Inventory(){
+        inventory.Add(new Healing("Food", 6));
+    }
+
     //adds this to the name of an item if it is already in your inventory
     int nameAdd = 1;
 
@@ -19,22 +24,25 @@ public class Inventory
             if (inventory.Count < size) {
                 thing.SetName(Rename(thing, inventory));
                 inventory.Add(thing);
+                Console.WriteLine("\n" + thing.name + " was added to the inventory.\n");
             }else{
                 //no space...
                 ReplaceItem(thing);
             }
-        }else if(ItemValid(thing.name, inventory)){
+        }else if(ItemValid(thing.name.ToLower(), inventory)){
             //if the item is a healing item
             //run a for loop to check the name of all items in inventory
             for (int i = 0; i < inventory.Count; i++){
                 if(inventory[i].name == thing.name){
-                    inventory[i].durability += thing.durability;
+                    inventory[i].AddDurability(thing.durability);
+                    Console.WriteLine("\n" + thing.name + " now has " + inventory[i].durability + " uses left.\n");
                 }
             }
         }else{
             if (inventory.Count < size) {
                 //add if there is space
                 inventory.Add(thing);
+                Console.WriteLine("\n" + thing.name + " was added to the inventory.\n");
             }else{
                 //no space...
                 ReplaceItem(thing);
@@ -48,18 +56,18 @@ public class Inventory
         //run as long as player doesn't make a valid choice
         while (choice.ToLower() != "yes" && choice.ToLower() != "no"){
             Console.WriteLine("\nThe inventory is full. Should an item be discarded to make room?\nYes or No\n");
-            choice = Console.ReadLine();
+            choice = Words.Read();
         }
         //do things based on choice
         //if yes, ask what item the player would like to replace and do so
         if(choice.ToLower() == "yes"){
-            Console.WriteLine("\n\nWhich item will be discarded?\n\nThe inventory consists of:\n" + ReadList(inventory) + "Cancel.\n");
+            Console.WriteLine("Which item will be discarded?\n\nThe inventory consists of:\n" + ReadList(inventory) + "Cancel.\n");
 
             //new choice search to see if the entered option is a valid item
-            string newChoice = Console.ReadLine();
+            string newChoice = Words.Read();
             while (!ItemValid(newChoice.ToLower(), inventory) && newChoice.ToLower() != "cancel"){
-                    Console.WriteLine("\n\nWhich item will be discarded?\n\nThe inventory consists of:\n" + ReadList(inventory) + "Cancel.\n");
-                    newChoice = Console.ReadLine();
+                    Console.WriteLine("Which item will be discarded?\n\nThe inventory consists of:\n" + ReadList(inventory) + "Cancel.\n");
+                    newChoice = Words.Read();
             }
             //if cancel is not selected
             if(newChoice.ToLower() != "cancel"){
@@ -69,7 +77,7 @@ public class Inventory
                 //make sure the name isn't taken
                 thing.SetName(Rename(thing, inventory));
                 //tell the player what they have done, so they can think about it
-                Console.WriteLine("\n" + inventory[index].name + " has been replaced with a " + thing.name + ".\n");
+                Console.WriteLine(inventory[index].name + " has been replaced with a " + thing.name + ".\n");
                 //swap them
                 ItemSwap(thing, index);
             }else{
@@ -122,7 +130,6 @@ public class Inventory
         if(!nameFree){
             newName += nameAdd++;
         }
-        Console.WriteLine(newName);
         return newName;
     }
 
@@ -149,12 +156,11 @@ public class Inventory
     //the number of items to choose from can be determined, and items are randomly created
     public void GetNewItem(int number, Player me){
         List<Item> newItems = new List<Item>();
-
+        bool healing = true;
         //make a new list of all choices
         for(int i = number; i > 0; i--){
             //randomly decide if the item is a healing item or a weapon
-            int choice = rand.Next(100);
-            bool healing = true;
+            int choice = rand.Next(100);         
             if(choice > 80 && healing){
                 newItems.Add(new Healing(Words.GetHealing(), rand.Next(3,6)));
                 healing = false;
@@ -169,8 +175,8 @@ public class Inventory
         //make sure its a valid choice
         string choiceString = "nada";
         while(!ItemValid(choiceString.ToLower(), newItems) && choiceString.ToLower() != "nothing"){
-            Console.WriteLine("\n" + me.name + " has found loot!\nWhich item should " + me.name + " take?\n" + ReadList(newItems) + "Nothing\n");
-            choiceString = Console.ReadLine();
+            Console.WriteLine(me.name + " has found loot!\nWhich item should " + me.name + " take?\n\n" + ReadList(newItems) + "Nothing\n");
+            choiceString = Words.Read();
         }
 
         if(choiceString != "nothing"){
@@ -182,12 +188,12 @@ public class Inventory
             AddItem(thing);
         }else{
             //player decided not to take anything
-            Console.WriteLine("\n" + me.name + " decided not to take anything.\n");
+            Console.WriteLine(me.name + " decided not to take anything.\n");
         }      
     }
 
     //function to write out the inventory outside of the inventory class
     public string PrintInventory(){
-        return ReadList(inventory);
+        return "\n" + ReadList(inventory);
     }
 }

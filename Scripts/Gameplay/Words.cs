@@ -62,4 +62,11 @@ public static class Words
     public static string GetHealing(){
         return healing[rand.Next(healing.Length)];
     }
+
+    //read from the console and add a new line
+    public static string Read(){
+        string response = Console.ReadLine();
+        Console.WriteLine("-------------------------------------------------------------------");
+        return response;
+    }
 }

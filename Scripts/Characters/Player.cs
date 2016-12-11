@@ -14,11 +14,11 @@ public class Player : Entity
     private void GetName() {
         //prompt for name
         Console.WriteLine("Welcome, adventurer.  Before you begin your quest, I must ask your name.\nWhat shall I call you?\n");
-        name = Console.ReadLine();
+        name = Words.Read();
         //make sure a name was entered               
         while(name == ""){
             Console.WriteLine("Everyone has a name.  You cannot remain anonymous in this story.\nWhat shall I call you?\n");
-            name = Console.ReadLine();
+            name = Words.Read();
         }
     }
 

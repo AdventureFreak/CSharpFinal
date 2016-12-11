@@ -22,13 +22,20 @@ public class Healing : Item
 
         stats = name + ": Heals " + power + "% total health. " + durability + " uses left.";
     }
+
+    //changes the name
     public override void SetName(string nam){
         name = nam;
+
+        //stats string must be remade
         stats = name + ": Heals " + power + "% total health. " + durability + " uses left.";
     }
 
-    public override void SetDurability(int num){
-        durability = num;
+    //adds durability to item
+    public override void AddDurability(int num){
+        durability += num;
+
+        //stats string must be remade
         stats = name + ": Heals " + power + "% total health. " + durability + " uses left.";
     }
 }

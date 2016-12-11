@@ -30,7 +30,7 @@ public class Item
         //doesn't do anything
     }
 
-    public virtual void SetDurability(int blah){
+    public virtual void AddDurability(int blah){
         //also doesn't do anythin
     }
 }
