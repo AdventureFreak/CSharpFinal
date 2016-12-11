@@ -5,6 +5,11 @@ public class Inventory
     int size = 0;
     public List<Item> inventory = new List<Item>();
 
+    //adds this to the name of an item if it is already in your inventory
+    int nameAdd = 1;
+
+    Random rand = new Random();
+
     //function to add items into inventory
     //parameters: item to add
     public void AddItem(Item thing){
@@ -12,6 +17,7 @@ public class Inventory
         if (thing.GetType()!=typeof(Healing)){
             //add item if inventory has space
             if (inventory.Count < size) {
+                thing.name = Rename(thing);
                 inventory.Add(thing);
             }else{
                 //no space...
@@ -43,44 +49,57 @@ public class Inventory
 
         //run as long as player doesn't make a valid choice
         while (choice.ToLower() != "yes" && choice.ToLower() != "no"){
-            Console.WriteLine("\nYou cannot hold any more items. Do you want to discard one of your items?\nYes or No\n");
+            Console.WriteLine("\nThe inventory is full. Should an item be discarded to make room?\nYes or No\n");
             choice = Console.ReadLine();
         }
         //do things based on choice
         //if yes, ask what item the player would like to replace and do so
         if(choice.ToLower() == "yes"){
-              Console.WriteLine("\nWhich item will you replace?" + ReadInv() + "Cancel\n");
+            Console.WriteLine("\nWhich item will be discarded?\n\nThe inventory consists of:\n" + ReadList(inventory) + "Cancel\n");
 
-              //new choice search to see if the entered option is a valid item
-              string newChoice = Console.ReadLine();
-              while (!ItemValid(newChoice.ToLower()) && newChoice.ToLower() != "cancel"){
-                  Console.WriteLine("\nInvalid choice\nWhich item will you replace?");
-                  newChoice = Console.ReadLine();
-              }
+            //new choice search to see if the entered option is a valid item
+            string newChoice = Console.ReadLine();
+            while (!ItemValid(newChoice.ToLower(), inventory) && newChoice.ToLower() != "cancel"){
+                    Console.WriteLine("\nWhich item will be discarded?\n\nThe inventory consists of:\n" + ReadList(inventory) + "Cancel\n");
+                    newChoice = Console.ReadLine();
+            }
+            //if cancel is not selected
+            if(newChoice.ToLower() != "cancel"){
+                //holds the index to replace
+                int index = GetIndex(thing.name);
 
-              //if cancel is not selected
-              //get index number of item with matching name
-        }
+                //make sure the name isn't taken
+                thing.name = Rename(thing);
+                //tell the player what they have done, so they can think about it
+                Console.WriteLine("\n" + inventory[index].name + " has been replaced with a " + thing.name);
+                //swap them
+                ItemSwap(thing, index);
+            }else{
+                Console.WriteLine(thing.name + " was left behind.");
+            }
+        }else{
         //if no, we are done
+        Console.WriteLine(thing.name + " was left behind.");
+        }
     }
 
     //builds a visual representation of the inventory
-    string ReadInv(){
-        string writeOut = "Your inventory consists of: \n";
-        foreach(Item thing in inventory){
+    string ReadList(List<Item> stuff){
+        string writeOut = "";
+        foreach(Item thing in stuff){
             writeOut += thing.PrintStats() + "\n";
         }
         return writeOut;
     }
 
     //check to see if a item name is within the item list
-    bool ItemValid(string test){
+    bool ItemValid(string test, List<Item> stuff){
         //list of strings
         //will hold all item names
         List<string> names = new List<string>();
 
         //add names of inventory over
-        foreach(Item thing in inventory){
+        foreach(Item thing in stuff){
             names.Add(thing.name.ToLower());
         }
 
@@ -90,5 +109,69 @@ public class Inventory
         }else{
             return false;
         }
+    }
+
+    //adds the item into the inventory while making sure the names don't stack
+    string Rename(Item thing){
+        //run a check on item names
+        string newName = thing.name;
+        bool nameFree = true;
+        foreach(Item things in inventory){
+            if(thing.name == things.name){
+                nameFree = false;
+            }   
+        }
+        //change name of item if it's not free
+        if(!nameFree){
+            thing.name = thing.name + nameAdd++.ToString();
+        }
+        return newName;
+    }
+
+    //find the index of an item with a matching name
+    int GetIndex(string name){
+        int index = -1;
+
+        //get index number of item with matching name
+        for (int i = 0; i < inventory.Count; i++){
+            if(inventory[i].name == name){
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    //the actual replacement of an item
+    void ItemSwap(Item thing, int index){
+        inventory.RemoveAt(index);
+        inventory.Insert(index, thing);
+    }
+
+    //call this to add an item into your inventory\
+    //the number of items to choose from can be determined, and items are randomly created
+    public Item GetNewItem(int number, Player me){
+        List<Item> newItems = new List<Item>();
+
+        //make a new list of all choices
+        for(int i = number; i > 0; i--){
+            //randomly decide if the item is a healing item or a weapon
+            int choice = rand.Next(100);
+            if(choice > 80){
+                newItems.Add(new Healing(Words.GetHealing(), rand.Next(3,6)));
+            }else{
+                newItems.Add(new Weapon(Words.GetWeapon(), rand.Next(1,me.attack/2), rand.Next(1,(me.defence/4)+1)));
+            }
+        }
+
+        //let the player pick an item to add
+        //make sure its a valid choice
+        string choiceString = "nada";
+        while(!ItemValid(choiceString.ToLower(), inventory) && choiceString.ToLower() != "nothing"){
+            Console.WriteLine(me.name + " has found loot!\nWhich item should " + me.name + " take?\n" + ReadList(newItems) + "Nothing\n");
+            choiceString = Console.ReadLine();
+        }
+
+        
+        
     }
 }
