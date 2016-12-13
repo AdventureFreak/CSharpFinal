@@ -26,37 +26,37 @@ public class Game
 
         //loop to build settings
         for (int i = 0; i < settingTypes.Capacity; i++){
-            int enemies = 0;
+            bool enemies = false;
             bool boss = false;
-            int loot = 0;
+            bool loot = false;
             int chance = rand.Next(100);
             switch (i)
             {
                 case 0:
-                    enemies = rand.Next(1,3);
+                    enemies = true;
                     boss = true;
-                    loot = rand.Next(1,4);
+                    loot = true;
                     break;
                 case 1:
                     boss = true;
-                    loot = rand.Next(1,4);
+                    loot = true;
                     break;
                 case 2:
-                    enemies = rand.Next(1,3);
-                    loot = rand.Next(1,4);
+                    enemies = true;
+                    loot = true;
                     break;
                 case 3:
-                    enemies = rand.Next(1,3);
+                    enemies = true;
                     boss = true;
                     break;
                 case 4:
-                    enemies = rand.Next(1,3);
+                    enemies = true;
                     break;
                 case 5:
                     boss = true;
                     break;
                 default:
-                    loot = rand.Next(1,4);
+                    loot = true;
                     break;
             }
             settingTypes[i] = new Setting(enemies, boss, loot, chance);
@@ -66,7 +66,7 @@ public class Game
         int duration = rand.Next(4,7);
         while (duration > 0)
         {
-            //pick a radnom item from the possible settings list
+            //pick a random item from the possible settings list
             int num = rand.Next(settingTypes.Count);
             //add it to the sequence
             sequence.Add(settingTypes[num]);

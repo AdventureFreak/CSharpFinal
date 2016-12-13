@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 public class Inventory
 {
-    int size = 5;
+    int size = 3;
     public List<Item> inventory = new List<Item>();
 
     //initiates the inventory
@@ -196,4 +196,11 @@ public class Inventory
     public string PrintInventory(){
         return "\n" + ReadList(inventory);
     }
+
+    //function to pull an item out of the inventory for uses
+    public int PullItemIndex(){
+
+    }
+
+    //update the inventory if a healing item was used
 }
