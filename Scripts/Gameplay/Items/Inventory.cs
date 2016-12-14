@@ -162,7 +162,7 @@ public class Inventory
         for(int i = number; i > 0; i--){
             //randomly decide if the item is a healing item or a weapon
             int choice = rand.Next(100);         
-            if(choice > 80 && healing){
+            if(choice > 60 && healing){
                 newItems.Add(new Healing(Words.GetHealing(), rand.Next(3,6)));
                 healing = false;
             }else{

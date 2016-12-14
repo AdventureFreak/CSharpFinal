@@ -150,7 +150,7 @@ public class Game
             }
         }
         if(sequence[0].treasure == true && player.HasHealth()){
-            inv.GetNewItem(3,player);
+            inv.GetNewItem(5,player);
         }
         if(sequence[0].boss == true && player.HasHealth()){
             if(Fight(2,player,inv)){
