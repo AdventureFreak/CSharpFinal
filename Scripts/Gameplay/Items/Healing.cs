@@ -40,7 +40,7 @@ public class Healing : Item
     }
 
     //use the healing item and decrease the number of uses, returns true if the item still has uses left
-    public bool IsUsable() {
+    public override bool Use() {
         if (durability > 1){
             durability--;
             return true;

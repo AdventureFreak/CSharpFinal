@@ -139,7 +139,7 @@ public class Inventory
         int index = -1;
 
         //get index number of item with matching name
-        for (int i = 0; i < stuff.Count; i++){
+        for (int i = 0; i < stuff.Count - 1; i++){
             if(stuff[i].name.ToLower() == name){
                 index = i;
             }
