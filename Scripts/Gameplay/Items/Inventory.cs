@@ -197,10 +197,52 @@ public class Inventory
         return "\n" + ReadList(inventory);
     }
 
-    //function to pull an item out of the inventory for uses
-    public int PullItemIndex(){
+    //function to use and item, returns -2 if the item is invalid for the requested action. -1 is used for cancel.
+    public int UseItem(string act){
+        int ret = -2;
+        int index;
 
+        //uses a variation of some code from the replace item function
+        Console.WriteLine("Which item will be used?\n\n" + ReadList(inventory) + "Cancel.\n");
+
+        //make sure the player has chosen an item the actually exsists
+        string choice = Words.Read();
+        while (!ItemValid(choice.ToLower(), inventory) && choice.ToLower() != "cancel"){
+                Console.WriteLine("Which item will be used?\n\n" + ReadList(inventory) + "Cancel.\n");
+                choice = Words.Read();
+        }
+        //if cancel is not selected
+        if(choice.ToLower() != "cancel"){
+            //holds the index o the item
+            index = GetIndex(choice.ToLower(), inventory);
+
+            switch(act){
+                //a weapon can attack
+                case "attack":
+                        if(inventory[index].GetType() == typeof(Weapon)){
+                            ret = inventory[index].power;
+                        }
+                    break;
+                //a weapon can defend        
+                case "defend":
+                        if(inventory[index].GetType() == typeof(Weapon)){
+                            ret = inventory[index].resist;
+                        }
+                    break;
+                //healing items restore health
+                default:
+                        if(inventory[index].GetType() == typeof(Healing)){
+                            ret = inventory[index].power;
+                            //use the item and delete it if it has no uses left
+                            if(!inventory[index].Use()){
+                                inventory.RemoveAt(index);
+                            }
+                        }
+                    break;
+            }
+        }else{
+            ret = -1;
+        }
+        return ret;
     }
-
-    //update the inventory if a healing item was used
 }

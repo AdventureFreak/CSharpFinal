@@ -38,4 +38,14 @@ public class Healing : Item
         //stats string must be remade
         stats = name + ": Heals " + power + "% total health. " + durability + " uses left.";
     }
+
+    //use the healing item and decrease the number of uses, returns true if the item still has uses left
+    public bool IsUsable() {
+        if (durability > 1){
+            durability--;
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

@@ -75,7 +75,13 @@ public class Game
         }
     }
 
-    public void Start(){
+    public void Start(Player player, Inventory inv){
+        int 
         
+    }
+
+    //make the right events happen for the given setting
+    public void RunSequence(){
+
     }
 }
