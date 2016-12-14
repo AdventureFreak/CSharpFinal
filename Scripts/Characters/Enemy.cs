@@ -37,7 +37,7 @@ class Enemy : Entity
     public bool Damage(int hurt){
         bool dead = false;
         //lower health
-        health -= hurt;
+        health -= Math.Max(hurt - defence, 1);
         //check if dead
         if(health < 1){
             dead = true;

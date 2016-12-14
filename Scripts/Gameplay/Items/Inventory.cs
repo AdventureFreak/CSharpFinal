@@ -201,7 +201,7 @@ public class Inventory
     }
 
     //function to use and item, returns -2 if the item is invalid for the requested action. -1 is used for cancel.
-    public int UseItem(string act){
+    public int UseItem(string act, Player player){
         int ret = -2;
         int index;
 
@@ -224,18 +224,21 @@ public class Inventory
                 case "attack":
                         if(inventory[index].GetType() == typeof(Weapon)){
                             ret = inventory[index].power;
+                            Console.WriteLine(player.name + " attacks with " + inventory[index].name + ".\n");
                         }
                     break;
                 //a weapon can defend        
                 case "defend":
                         if(inventory[index].GetType() == typeof(Weapon)){
                             ret = inventory[index].resist;
+                            Console.WriteLine(player.name + " defends with " + inventory[index].name + ".\n");
                         }
                     break;
                 //healing items restore health
                 default:
                         if(inventory[index].GetType() == typeof(Healing)){
                             ret = inventory[index].power;
+                            Console.WriteLine(player.name + " gains health with " + inventory[index].name + ".\n");
                             //use the item and delete it if it has no uses left
                             if(!inventory[index].Use()){
                                 inventory.RemoveAt(index);

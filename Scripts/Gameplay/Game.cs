@@ -76,7 +76,7 @@ public class Game
     }
 
     public void Start(Player player, Inventory inv){
-        while (sequence.Count > 0){
+        while (sequence.Count > 0 && player.HasHealth()){
             RunSequence(player, inv);
         }
 
@@ -91,21 +91,103 @@ public class Game
     bool Fight(int type, Player player, Inventory inv){
         int hp;
         int atk;
+        Enemy enemy;
         //creates an appropriate enemy, boss, or the final boss
         switch (type)
         {
             //standard enemy
             case 1:
-
+                enemy = new Enemy(player.attack * 10, player.baseHealth / 15, 0, Words.GetEnemy());
                 break;
             //boss
             case 2:
-
+                enemy = new Enemy(player.attack * 20, player.baseHealth / 12, player.attack/3, Words.GetBoss());
                 break;
             //final boss
             default:
-
+                enemy = new Enemy(player.attack * 20, player.baseHealth / 8, player.attack, Words.GetFinal());
                 break;
+        }
+
+        //start the battle
+        Console.WriteLine(enemy.name + " stands in " + player.name + "'s way.");
+        while(enemy.HasHealth() && player.HasHealth()){
+            //set to false when player cancels their item selection, so they can do their turn over again
+            bool enemyTurn = true;
+            //the amount of damage the player will block
+            int resist = 0;
+            //do an action check
+            Console.WriteLine("-------------------------------------------------------------------\n" + player.name + " has " + player.health + " health\n" + enemy.name + " has + " + enemy.health + " health\n\nWhat will " + player.name + " do?\nAttack\nDefend\nHeal\n\n");
+            string choice = Words.Read();
+
+            //run as long as player doesn't make a valid choice
+            while (choice.ToLower() != "attack" && choice.ToLower() != "defend" && choice.ToLower() != "heal"){
+                Console.WriteLine("\nNow is not the time to be funny! " + player.name + "'s life is at stake.\n\nWhat will " + player.name + " do?\nAttack\nDefend\nHeal\n\n");
+                choice = Words.Read();
+            }
+
+            switch (choice.ToLower())
+            {  
+                //player attacks
+                case "attack":
+                    int dmg = inv.UseItem("attack", player);
+                    //item is a weapon
+                    if(dmg > 0){
+                        enemy.Damage(player.attack + dmg);
+                        //player canelled their action
+                    }else if(dmg == -1){
+                        enemyTurn = false;
+                        //player is dumb and tried to fight with food or something
+                    }else {
+                        Console.WriteLine("That isn't going to work.\n");
+                    }
+                    break;
+                //player defends
+                case "defend":
+                    int block = inv.UseItem("defend", player);
+                    //item is a weapon
+                    if(block > 0){
+                        resist = block;
+                        //player canelled their action
+                    }else if(block == -1){
+                        enemyTurn = false;
+                        //player is dumb and tried to defend with food or something
+                    }else {
+                        Console.WriteLine("That isn't going to work.\n");
+                    }
+                    break;
+                //player heals
+                default:
+                    int heal = inv.UseItem("heal", player);
+                    //item is a healing item
+                    if(heal > 0){//heal the player
+                        double gain = player.baseHealth * (System.Convert.ToDouble(heal) / 100);
+                        player.health = Math.Min(System.Convert.ToInt32(gain), player.baseHealth);
+                        //player canelled their action
+                    }else if(heal == -1){
+                        enemyTurn = false;
+                        //player is dumb and tried to heal with a sword or something
+                    }else {
+                        Console.WriteLine("That isn't going to work.\n");
+                    }
+                    break;
+            }
+
+            //enemy's turn
+            if(enemyTurn && enemy.HasHealth()){
+                int dmg = enemy.Fight();
+                if(dmg > 0){
+                    Console.WriteLine(player.name + " took " + (Math.Max(1, dmg - resist)) + " damage.\n");
+                }else{
+                    Console.WriteLine(player.name + " should prepare for the next attack.\n");
+                }
+            }
+        }
+        //player lost
+        if(!player.HasHealth()){
+            return false;
+        }else{
+            return true;
         }
     }
 }
