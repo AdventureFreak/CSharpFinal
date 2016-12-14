@@ -25,7 +25,12 @@ public class Item
         //also doesn't do anythin
     }
 
-    public virtual bool Use(){
-        return true;
+    public virtual bool IsUseable() {
+        if (durability > 1){
+            durability--;
+            return true;
+        }else{
+            return false;
+        }
     }
 }

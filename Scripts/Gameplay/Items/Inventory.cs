@@ -73,7 +73,7 @@ public class Inventory
             //if cancel is not selected
             if(newChoice.ToLower() != "cancel"){
                 //holds the index to replace
-                int index = GetIndex(thing.name.ToLower(), inventory);
+                int index = GetIndex(newChoice.ToLower(), inventory);
 
                 //make sure the name isn't taken
                 thing.SetName(Rename(thing, inventory));
@@ -139,7 +139,7 @@ public class Inventory
         int index = -1;
 
         //get index number of item with matching name
-        for (int i = 0; i < stuff.Count - 1; i++){
+        for (int i = 0; i < stuff.Count; i++){
             if(stuff[i].name.ToLower() == name){
                 index = i;
             }
@@ -240,7 +240,7 @@ public class Inventory
                             ret = inventory[index].power;
                             Console.WriteLine(player.name + " gains health with " + inventory[index].name + ".\n");
                             //use the item and delete it if it has no uses left
-                            if(!inventory[index].Use()){
+                            if(!inventory[index].IsUseable()){
                                 inventory.RemoveAt(index);
                             }
                         }

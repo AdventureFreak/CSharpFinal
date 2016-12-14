@@ -39,10 +39,10 @@ public class Healing : Item
         stats = name + ": Heals " + power + "% total health. " + durability + " uses left.";
     }
 
-    //use the healing item and decrease the number of uses, returns true if the item still has uses left
-    public override bool Use() {
+    public override bool IsUseable() {
         if (durability > 1){
             durability--;
+            stats = name + ": Heals " + power + "% total health. " + durability + " uses left.";
             return true;
         }else{
             return false;
