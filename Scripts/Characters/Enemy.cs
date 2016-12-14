@@ -24,8 +24,8 @@ class Enemy : Entity
         }else{
             if(charge){
                 Console.WriteLine(name + " attacks at full power!\n\n");
-                return attack * 2;
                 charge = false;
+                return attack * 2;
             }else{
                 Console.WriteLine(name + " attacks!\n\n");
                 return attack;
