@@ -22,4 +22,10 @@ public class Player : Entity
     }
 
     //LevelUp increases stats
+    public void LevelUp(){
+        Console.WriteLine(name + " leveled up!\nHealth increases.\nAttack increases.\n\n");
+        baseHealth += 50;
+        health += 50;
+        attack += 5;
+    }
 }

@@ -29,7 +29,7 @@ public class Game
             bool enemies = false;
             bool boss = false;
             bool loot = false;
-            int chance = rand.Next(100);
+            int chance = rand.Next(10);
             switch (i)
             {
                 case 0:
@@ -79,12 +79,83 @@ public class Game
         while (sequence.Count > 0 && player.HasHealth()){
             RunSequence(player, inv);
         }
-
+        if(player.HasHealth()){
+            Console.WriteLine(player.name + " cames to their greatest challenge yet.\n");
+            if(Fight(3,player,inv)){
+                Console.WriteLine(player.name + " has conquered all the trials they have faced.\n" + player.name + " is a true adeventurer!");
+            }
+        }else{
+                Console.WriteLine("\n\n\n\nYOU LOSE!!!!!!!!\n\n\n\n");
+        }
     }
 
     //make the right events happen for the given setting
     public void RunSequence(Player player, Inventory inv){
         SetStage(player);
+        //chance time
+        //do something random to the player
+        switch(sequence[0].chance){
+            case 0:
+                Console.WriteLine(player.name + " found something!\n");
+                inv.GetNewItem(1,player);
+                break;
+
+            case 1:
+                Console.WriteLine(player.name + " got hurt by a trap!\n");
+                int dmg = rand.Next(5, 20);
+                player.health -= dmg;
+                Console.WriteLine(player.name + " took " + dmg + " damage from the trap.\n");
+                break;
+
+            case 2:
+                Console.WriteLine(player.name + "'s health in a healing fountian!\n");
+                player.health = player.baseHealth;
+                break;
+
+            case 3:
+                Console.WriteLine(player.name + " was ambushed!\n");
+                Fight(1, player, inv);
+                break;
+
+            case 4:
+                Console.WriteLine("There is nothing of interest here.\n");
+                break;
+
+            case 5:
+                Console.WriteLine(player.name + " is contemplating life.\n");
+                break;
+
+            case 6:
+                Console.WriteLine(player.name + " can't decide what to eat for dinner.\n");
+                break;
+
+            case 7:
+                Console.WriteLine("The air is stale.\n");
+                break;
+
+            case 8:
+                Console.WriteLine("Looks like an adventurer was here.\n");
+                break;
+
+            case 9:
+                Console.WriteLine(player.name + " is ready.\n");
+                break;                
+        }
+
+        if(sequence[0].enemies == true && player.HasHealth()){
+            if(Fight(1,player,inv)){
+                Console.WriteLine(player.name + " feels stronger.");
+            }
+        }
+        if(sequence[0].treasure == true && player.HasHealth()){
+            inv.GetNewItem(3,player);
+        }
+        if(sequence[0].boss == true && player.HasHealth()){
+            if(Fight(2,player,inv)){
+                Console.WriteLine(player.name + " feels stronger.");
+            }
+        }
+        sequence.RemoveAt(0);
     }
 
     //the battle sequence
@@ -178,6 +249,7 @@ public class Game
                 int dmg = enemy.Fight();
                 if(dmg > 0){
                     Console.WriteLine(player.name + " took " + (Math.Max(1, dmg - resist)) + " damage.\n");
+                    player.health -= Math.Max(1, dmg - resist);
                 }else{
                     Console.WriteLine(player.name + " should prepare for the next attack.\n");
                 }
@@ -185,8 +257,13 @@ public class Game
         }
         //player lost
         if(!player.HasHealth()){
+            Console.WriteLine(player.name + " was defeated.\n\n");            
             return false;
         }else{
+            if(type != 3){
+                player.LevelUp();
+            }
+            Console.WriteLine(enemy.name + " was defeated.\n\n");
             return true;
         }
     }
