@@ -6,6 +6,7 @@ public class Player : Entity
         GetName();
         baseHealth = 100;
         attack = 5;
+        health = 100;
 
     }
 

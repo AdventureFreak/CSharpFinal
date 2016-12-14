@@ -25,7 +25,7 @@ public class Game
         List<Setting> settingTypes = new List<Setting>(7);
 
         //loop to build settings
-        for (int i = 0; i < settingTypes.Capacity; i++){
+        for (int i = 0; i < settingTypes.Capacity - 1; i++){
             bool enemies = false;
             bool boss = false;
             bool loot = false;
@@ -59,13 +59,14 @@ public class Game
                     loot = true;
                     break;
             }
-            settingTypes[i] = new Setting(enemies, boss, loot, chance);
+            settingTypes.Add(new Setting(enemies, boss, loot, chance));
         }
 
         //determine how many locations to play through and add them from the array into the list
         int duration = rand.Next(4,7);
         while (duration > 0)
         {
+            duration--;
             //pick a random item from the possible settings list
             int num = rand.Next(settingTypes.Count);
             //add it to the sequence
@@ -76,6 +77,7 @@ public class Game
     }
 
     public void Start(Player player, Inventory inv){
+        FillList();
         while (sequence.Count > 0 && player.HasHealth()){
             RunSequence(player, inv);
         }
@@ -160,15 +162,13 @@ public class Game
 
     //the battle sequence
     bool Fight(int type, Player player, Inventory inv){
-        int hp;
-        int atk;
         Enemy enemy;
         //creates an appropriate enemy, boss, or the final boss
         switch (type)
         {
             //standard enemy
             case 1:
-                enemy = new Enemy(player.attack * 10, player.baseHealth / 15, 0, Words.GetEnemy());
+                enemy = new Enemy(player.attack * 6, player.baseHealth / 15, 0, Words.GetEnemy());
                 break;
             //boss
             case 2:
@@ -188,7 +188,7 @@ public class Game
             //the amount of damage the player will block
             int resist = 0;
             //do an action check
-            Console.WriteLine("-------------------------------------------------------------------\n" + player.name + " has " + player.health + " health\n" + enemy.name + " has + " + enemy.health + " health\n\nWhat will " + player.name + " do?\nAttack\nDefend\nHeal\n\n");
+            Console.WriteLine("-------------------------------------------------------------------\n" + player.name + " has " + player.health + " health\n" + enemy.name + " has " + enemy.health + " health\n\nWhat will " + player.name + " do?\nAttack\nDefend\nHeal\n\n");
             string choice = Words.Read();
 
             //run as long as player doesn't make a valid choice
@@ -233,7 +233,8 @@ public class Game
                     //item is a healing item
                     if(heal > 0){//heal the player
                         double gain = player.baseHealth * (System.Convert.ToDouble(heal) / 100);
-                        player.health = Math.Min(System.Convert.ToInt32(gain), player.baseHealth);
+                        Console.WriteLine(player.name + " healed " + System.Convert.ToInt32(gain) + " health.\n");
+                        player.health = Math.Min(System.Convert.ToInt32(gain) + player.health, player.baseHealth);
                         //player canelled their action
                     }else if(heal == -1){
                         enemyTurn = false;

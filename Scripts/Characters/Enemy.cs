@@ -38,6 +38,7 @@ class Enemy : Entity
         bool dead = false;
         //lower health
         health -= Math.Max(hurt - defence, 1);
+        Console.WriteLine(name + " took " + Math.Max(hurt - defence, 1) + " damage.\n");
         //check if dead
         if(health < 1){
             dead = true;
