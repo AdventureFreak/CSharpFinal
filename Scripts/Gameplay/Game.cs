@@ -76,12 +76,36 @@ public class Game
     }
 
     public void Start(Player player, Inventory inv){
-        int 
-        
+        while (sequence.Count > 0){
+            RunSequence(player, inv);
+        }
+
     }
 
     //make the right events happen for the given setting
-    public void RunSequence(){
+    public void RunSequence(Player player, Inventory inv){
+        SetStage(player);
+    }
 
+    //the battle sequence
+    bool Fight(int type, Player player, Inventory inv){
+        int hp;
+        int atk;
+        //creates an appropriate enemy, boss, or the final boss
+        switch (type)
+        {
+            //standard enemy
+            case 1:
+
+                break;
+            //boss
+            case 2:
+
+                break;
+            //final boss
+            default:
+
+                break;
+        }
     }
 }

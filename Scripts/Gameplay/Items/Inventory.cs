@@ -7,6 +7,7 @@ public class Inventory
 
     //initiates the inventory
     public Inventory(){
+        inventory.Add(new Weapon(Words.GetWeapon(), 1, 10));
         inventory.Add(new Healing("Food", 6));
     }
 
@@ -165,7 +166,9 @@ public class Inventory
                 newItems.Add(new Healing(Words.GetHealing(), rand.Next(3,6)));
                 healing = false;
             }else{
-                Weapon weap = new Weapon(Words.GetWeapon(), rand.Next(1,me.attack/2), rand.Next(1,(me.defence/4)+1));
+                int lowerBound = me.baseHealth / 10;
+                int upperBound = me.baseHealth / 6;
+                Weapon weap = new Weapon(Words.GetWeapon(), rand.Next(1,me.attack/2), rand.Next(lowerBound, upperBound));
                 weap.SetName(Rename(weap, newItems));
                 newItems.Add(weap);
             }
