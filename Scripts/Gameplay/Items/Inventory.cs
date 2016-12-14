@@ -8,7 +8,7 @@ public class Inventory
     //initiates the inventory
     public Inventory(){
         inventory.Add(new Weapon(Words.GetWeapon(), 3, 10));
-        inventory.Add(new Healing("Food", 6));
+        inventory.Add(new Healing("Food", 10));
     }
 
     //adds this to the name of an item if it is already in your inventory

@@ -8,7 +8,7 @@ public class Healing : Item
         switch (name)
         {
             case "Food":
-                power = 20;
+                power = 25;
                 break;
 
             case "Medicine":
