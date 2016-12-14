@@ -16,7 +16,7 @@ public static class Words
     //atmosphere!
     static string[] atmosphere = {"cold", "quiet", "eerie", "damp", "windy", "depressing", "dark"};
     //things to fight with
-    static string[] weapons = {"Short Sword", "Broad Sword", "Knife", "Bow", "Mace", "Battle Axe"};
+    static string[] weapons = {"Sword", "Knife", "Bow", "Mace", "Axe"};
     //things to ease your pain
     static string[] healing = {"Potion", "Food", "Medicine"};
     //randomizer for words class
