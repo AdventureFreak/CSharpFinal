@@ -12,7 +12,6 @@ class Enemy : Entity
     }
 
     public int Fight(){
-        Console.WriteLine("-------------------------------------------------------------------\n");
         //randomly determine what the enemy will do
         int chance = rand.Next(10);
 
