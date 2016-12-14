@@ -4,9 +4,9 @@ public class Player : Entity
     //constructor, asks the player for their name
     public Player() {
         GetName();
-        baseHealth = 100;
+        baseHealth = 20;
         attack = 5;
-        health = 100;
+        health = baseHealth;
 
     }
 
@@ -25,8 +25,8 @@ public class Player : Entity
     //LevelUp increases stats
     public void LevelUp(){
         Console.WriteLine(name + " leveled up!\nHealth increases.\nAttack increases.\n\n");
-        baseHealth += 50;
-        health += 50;
+        baseHealth += 20;
+        health += 20;
         attack += 5;
     }
 }

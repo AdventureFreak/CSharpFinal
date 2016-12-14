@@ -172,11 +172,11 @@ public class Game
                 break;
             //boss
             case 2:
-                enemy = new Enemy(player.attack * 20, player.baseHealth / 12, player.attack/3, Words.GetBoss());
+                enemy = new Enemy(player.attack * 12, player.baseHealth / 12, player.attack/3, Words.GetBoss());
                 break;
             //final boss
             default:
-                enemy = new Enemy(player.attack * 20, player.baseHealth / 8, player.attack, Words.GetFinal());
+                enemy = new Enemy(player.attack * 12, player.baseHealth / 8, player.attack, Words.GetFinal());
                 break;
         }
 
